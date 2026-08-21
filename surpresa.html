@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Uma surpresa pra você ❤️</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background: linear-gradient(-45deg, #ff9a9e, #fecfef, #ff9a9e, #fad0c4);
+    background-size: 400% 400%;
+    animation: gradientBG 12s ease infinite;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow:hidden;
+  }
+
+  @keyframes gradientBG {
+    0% {background-position:0% 50%;}
+    50% {background-position:100% 50%;}
+    100% {background-position:0% 50%;}
+  }
+
+  .page {
+    display:none;
+    text-align:center;
+    padding:30px;
+    max-width:600px;
+  }
+
+  .page.active { display:flex; flex-direction:column; align-items:center; }
+
+  /* ---------- PÁGINA 1 ---------- */
+  #titulo1 {
+    color:#fff;
+    font-size:2rem;
+    margin-bottom:30px;
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.2);
+  }
+
+  .coracao {
+    font-size:3rem;
+    animation: pulsa 1.2s ease-in-out infinite;
+    margin-bottom:20px;
+  }
+
+  @keyframes pulsa {
+    0%,100% { transform:scale(1); }
+    50% { transform:scale(1.2); }
+  }
+
+  button {
+    background:#fff;
+    color:#ff5e78;
+    border:none;
+    padding:16px 36px;
+    font-size:1.1rem;
+    font-weight:bold;
+    border-radius:50px;
+    cursor:pointer;
+    box-shadow:0 8px 20px rgba(0,0,0,0.2);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  button:hover {
+    transform:scale(1.08);
+    box-shadow:0 12px 25px rgba(0,0,0,0.25);
+  }
+
+  /* ---------- FRASES ---------- */
+  #frases {
+    color:#fff;
+    font-size:1.4rem;
+    min-height:120px;
+    text-shadow: 1px 1px 6px rgba(0,0,0,0.2);
+    margin:20px 0;
+  }
+
+  .frase {
+    opacity:0;
+    animation: fadeInUp 1s forwards;
+  }
+
+  @keyframes fadeInUp {
+    from { opacity:0; transform:translateY(20px); }
+    to { opacity:1; transform:translateY(0); }
+  }
+
+  #btnProxima {
+    opacity:0;
+    animation: fadeInUp 1s forwards;
+  }
+
+  /* ---------- PÁGINA 2 (pedido final) ---------- */
+  #titulo2 {
+    color:#fff;
+    font-size:2.4rem;
+    margin-bottom:40px;
+    text-shadow: 2px 2px 10px rgba(0,0,0,0.3);
+  }
+
+  .botoes-final {
+    display:flex;
+    gap:20px;
+  }
+
+  #btnNao {
+    background:transparent;
+    color:#fff;
+    border:2px solid #fff;
+    box-shadow:none;
+  }
+
+  .emoji-flutuante {
+    position:fixed;
+    top:-50px;
+    font-size:1.5rem;
+    animation: cair linear forwards;
+    pointer-events:none;
+  }
+
+  @keyframes cair {
+    to { transform: translateY(110vh) rotate(360deg); opacity:0.3; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- PÁGINA 1 -->
+  <div class="page active" id="pagina1">
+    <div class="coracao">💗</div>
+    <h1 id="titulo1">Oi, amor... tenho uma coisa pra te mostrar</h1>
+    <button id="btnInicio" onclick="iniciarFrases()">Clica aqui 👉</button>
+
+    <div id="frases"></div>
+  </div>
+
+  <!-- PÁGINA 2 -->
+  <div class="page" id="pagina2">
+    <h1 id="titulo2">Quer namorar comigo? 💍</h1>
+    <div class="botoes-final">
+      <button id="btnSim" onclick="dizerSim()">SIM! ❤️</button>
+      <button id="btnNao" onmouseover="fugir(this)">Não</button>
+    </div>
+    <div id="respostaFinal" style="color:#fff; font-size:1.6rem; margin-top:30px;"></div>
+  </div>
+
+<script>
+  // ======= EDITE AQUI AS FRASES =======
+  const frases = [
+    "Desde que te conheci, minha vida ficou mais leve e mais feliz.",
+    "Você é meu lugar favorito no mundo.",
+    "Cada dia ao seu lado é um presente que eu não quero parar de receber.",
+    "Então eu queria te fazer uma pergunta importante..."
+  ];
+  // =====================================
+
+  function iniciarFrases() {
+    document.getElementById('btnInicio').style.display = 'none';
+    const container = document.getElementById('frases');
+    let i = 0;
+
+    function mostrarProxima() {
+      container.innerHTML = '';
+      const p = document.createElement('p');
+      p.className = 'frase';
+      p.textContent = frases[i];
+      container.appendChild(p);
+      i++;
+
+      if (i < frases.length) {
+        setTimeout(mostrarProxima, 3200);
+      } else {
+        setTimeout(mostrarBotaoProxima, 3200);
+      }
+    }
+
+    mostrarProxima();
+  }
+
+  function mostrarBotaoProxima() {
+    const container = document.getElementById('frases');
+    const btn = document.createElement('button');
+    btn.id = 'btnProxima';
+    btn.textContent = 'Continuar →';
+    btn.onclick = irParaPagina2;
+    container.appendChild(btn);
+  }
+
+  function irParaPagina2() {
+    document.getElementById('pagina1').classList.remove('active');
+    document.getElementById('pagina2').classList.add('active');
+  }
+
+  function dizerSim() {
+    document.getElementById('respostaFinal').textContent = 'Eu sabia! Te amo muito! 🥰💕';
+    lancarConfete();
+  }
+
+  // O botão "Não" foge do mouse, hehe
+  function fugir(btn) {
+    const x = Math.random() * (window.innerWidth - 150);
+    const y = Math.random() * (window.innerHeight - 100);
+    btn.style.position = 'fixed';
+    btn.style.left = x + 'px';
+    btn.style.top = y + 'px';
+  }
+
+  function lancarConfete() {
+    const emojis = ['💗','💖','💕','✨','💍'];
+    for (let i = 0; i < 40; i++) {
+      setTimeout(() => {
+        const el = document.createElement('div');
+        el.className = 'emoji-flutuante';
+        el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+        el.style.left = Math.random() * 100 + 'vw';
+        el.style.animationDuration = (2 + Math.random() * 2) + 's';
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), 4000);
+      }, i * 80);
+    }
+  }
+</script>
+
+</body>
+</html>
