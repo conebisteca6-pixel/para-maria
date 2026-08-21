@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Uma surpresa pra você ❤️</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background-image:
+      linear-gradient(-45deg, rgba(10,20,40,0.75), rgba(30,60,100,0.7), rgba(10,20,40,0.8)),
+      url('fundo.jpg');
+    background-size: cover, cover;
+    background-position: center, center;
+    background-attachment: fixed, fixed;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow:hidden;
+    position:relative;
+  }
+
+  .decor {
+    position:fixed;
+    top:-40px;
+    font-size:1.2rem;
+    opacity:0.55;
+    animation: cairSuave linear infinite;
+    pointer-events:none;
+    z-index:0;
+  }
+
+  @keyframes cairSuave {
+    from { transform: translateY(-10vh) translateX(0) rotate(0deg); }
+    to   { transform: translateY(110vh) translateX(20px) rotate(200deg); }
+  }
+
+  .page {
+    display:none;
+    text-align:center;
+    padding:30px;
+    max-width:620px;
+    position:relative;
+    z-index:1;
+  }
+
+  .page.active { display:flex; flex-direction:column; align-items:center; }
+
+  #titulo1 {
+    color:#fff;
+    font-size:1.9rem;
+    margin-bottom:30px;
+    text-shadow: 2px 2px 10px rgba(0,0,0,0.4);
+  }
+
+  .coracao {
+    font-size:3rem;
+    animation: pulsa 1.4s ease-in-out infinite;
+    margin-bottom:20px;
+  }
+
+  @keyframes pulsa {
+    0%,100% { transform:scale(1); }
+    50% { transform:scale(1.2); }
+  }
+
+  button {
+    background:#fff;
+    color:#2c5364;
+    border:none;
+    padding:16px 36px;
+    font-size:1.1rem;
+    font-weight:bold;
+    border-radius:50px;
+    cursor:pointer;
+    box-shadow:0 8px 20px rgba(0,0,0,0.3);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  button:hover {
+    transform:scale(1.08);
+    box-shadow:0 12px 25px rgba(0,0,0,0.35);
+  }
+
+  #frases {
+    color:#fff;
+    font-size:1.35rem;
+    min-height:140px;
+    text-shadow: 1px 1px 8px rgba(0,0,0,0.4);
+    margin:20px 0;
+    line-height:1.5;
+  }
+
+  .frase {
+    opacity:0;
+    animation: fadeInUp 1.2s forwards;
+  }
+
+  @keyframes fadeInUp {
+    from { opacity:0; transform:translateY(20px); }
+    to { opacity:1; transform:translateY(0); }
+  }
+
+  #btnProxima {
+    opacity:0;
+    animation: fadeInUp 1s forwards;
+  }
+
+  #titulo2 {
+    color:#fff;
+    font-size:2.3rem;
+    margin-bottom:40px;
+    text-shadow: 2px 2px 12px rgba(0,0,0,0.4);
+  }
+
+  .botoes-final {
+    display:flex;
+    gap:20px;
+  }
+
+  #btnNao {
+    background:transparent;
+    color:#fff;
+    border:2px solid #fff;
+    box-shadow:none;
+  }
+
+  .emoji-flutuante {
+    position:fixed;
+    top:-50px;
+    font-size:1.5rem;
+    animation: cair linear forwards;
+    pointer-events:none;
+    z-index:2;
+  }
+
+  @keyframes cair {
+    to { transform: translateY(110vh) rotate(360deg); opacity:0.3; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="page active" id="pagina1">
+    <div class="coracao">💙</div>
+    <h1 id="titulo1">Oi, Maria... tenho uma coisa pra te mostrar</h1>
+    <button id="btnInicio" onclick="iniciarFrases()">Clica aqui 👉</button>
+
+    <div id="frases"></div>
+  </div>
+
+  <div class="page" id="pagina2">
+    <h1 id="titulo2">Quer namorar comigo? 💍</h1>
+    <div class="botoes-final">
+      <button id="btnSim" onclick="dizerSim()">SIM! ❤️</button>
+      <button id="btnNao" onmouseover="fugir(this)">Não</button>
+    </div>
+    <div id="respostaFinal" style="color:#fff; font-size:1.6rem; margin-top:30px;"></div>
+  </div>
+
+<script>
+  const frases = [
+    "Oiii meu amor, Maria...",
+    "Desde que te conheci, minha vida ficou mais feliz, mais leve, mais alegre.",
+    "Quero te agradecer por ser essa pessoa incrível comigo.",
+    "Por nunca desistir de mim, independente dos meus erros.",
+    "Enfim... eu te amo muito.",
+    "E agora estou aqui pra te pedir uma coisa..."
+  ];
+
+  const TEMPO_ENTRE_FRASES = 5000;
+
+  function iniciarFrases() {
+    document.getElementById('btnInicio').style.display = 'none';
+    const container = document.getElementById('frases');
+    let i = 0;
+
+    function mostrarProxima() {
+      container.innerHTML = '';
+      const p = document.createElement('p');
+      p.className = 'frase';
+      p.textContent = frases[i];
+      container.appendChild(p);
+      i++;
+
+      if (i < frases.length) {
+        setTimeout(mostrarProxima, TEMPO_ENTRE_FRASES);
+      } else {
+        setTimeout(mostrarBotaoProxima, TEMPO_ENTRE_FRASES);
+      }
+    }
+
+    mostrarProxima();
+  }
+
+  function mostrarBotaoProxima() {
+    const container = document.getElementById('frases');
+    const btn = document.createElement('button');
+    btn.id = 'btnProxima';
+    btn.textContent = 'Continuar →';
+    btn.onclick = irParaPagina2;
+    container.appendChild(btn);
+  }
+
+  function irParaPagina2() {
+    document.getElementById('pagina1').classList.remove('active');
+    document.getElementById('pagina2').classList.add('active');
+  }
+
+  function dizerSim() {
+    document.getElementById('respostaFinal').textContent = 'Eu sabia! Te amo muito! 🥰💙';
+    lancarConfete();
+  }
+
+  function fugir(btn) {
+    const x = Math.random() * (window.innerWidth - 150);
+    const y = Math.random() * (window.innerHeight - 100);
+    btn.style.position = 'fixed';
+    btn.style.left = x + 'px';
+    btn.style.top = y + 'px';
+  }
+
+  function lancarConfete() {
+    const emojis = ['💙','💖','💕','✨','💍'];
+    for (let i = 0; i < 40; i++) {
+      setTimeout(() => {
+        const el = document.createElement('div');
+        el.className = 'emoji-flutuante';
+        el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+        el.style.left = Math.random() * 100 + 'vw';
+        el.style.animationDuration = (2 + Math.random() * 2) + 's';
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), 4000);
+      }, i * 80);
+    }
+  }
+
+  function criarDecoracao() {
+    const simbolos = ['✨','⭐','💙','🌙'];
+    for (let i = 0; i < 18; i++) {
+      const el = document.createElement('div');
+      el.className = 'decor';
+      el.textContent = simbolos[Math.floor(Math.random() * simbolos.length)];
+      el.style.left = Math.random() * 100 + 'vw';
+      el.style.animationDuration = (10 + Math.random() * 10) + 's';
+      el.style.animationDelay = (Math.random() * 10) + 's';
+      el.style.fontSize = (0.9 + Math.random() * 0.9) + 'rem';
+      document.body.appendChild(el);
+    }
+  }
+  criarDecoracao();
+</script>
+
+</body>
+</html>
